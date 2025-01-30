@@ -47,7 +47,6 @@ In Nuxt projects, add this configuration inside `nuxt.config.js` under `build` t
 ```js
     extend(config, { isServer }) {
       if (!isServer) {
-        // Exclude fs in the client-side build
         config.node = {
           fs: 'empty'
         };
