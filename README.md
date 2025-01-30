@@ -1,5 +1,8 @@
 # Cache Buster JS
 
+## Introduction
+`cache-buster-js` is a simple utility to generate a `version.txt` file during the build process, ensuring that deployed applications can detect updates and refresh caches accordingly.
+
 ## How to Use
 
 ### Installation
@@ -16,7 +19,7 @@ Update the respective script (commonly `build` or `generate`) so the `generateVe
 "generate": "node -e \"require('cache-buster-js').generateVersion()\" && nuxt generate"
 ```
 
-By default, `version.txt` will be generated in the `/static` directory, but you can change this by specifying a different folder:
+By default, `version.txt` will be generated in the `/static` directory, but you can change this by specifying a different folder. The path should be relative to the project's root:
 
 ```json
 "generate": "node -e \"require('cache-buster-js').generateVersion('public')\" && nuxt generate"
@@ -35,18 +38,24 @@ Then, call `cacheBuster` at the appropriate moment (usually inside `mounted` or 
 await cacheBuster();
 ```
 
+### How `cacheBuster` Works
+The `cacheBuster` function fetches the `version.txt` file from the server and compares it with the previously stored version in `localStorage`. If a new version is detected, it reloads the page to ensure users receive the latest updates. This helps prevent users from running outdated cached assets.
+
 ### Nuxt Configuration
-For Nuxt projects, add this code in `nuxt.config.js` under `build` to exclude `fs` from the client-side build:
+In Nuxt projects, add this configuration inside `nuxt.config.js` under `build` to exclude `fs` from the client-side build:
 
 ```js
-build: {
-  extend(config, { isServer }) {
-    if (!isServer) {
-      config.node = {
-        fs: 'empty'
-      };
+export default {
+  build: {
+    extend(config, { isServer }) {
+      if (!isServer) {
+        // Exclude fs in the client-side build
+        config.node = {
+          fs: 'empty'
+        };
+      }
     }
   }
-}
+};
 ```
 
