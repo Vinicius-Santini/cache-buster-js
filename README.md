@@ -45,8 +45,6 @@ The `cacheBuster` function fetches the `version.txt` file from the server and co
 In Nuxt projects, add this configuration inside `nuxt.config.js` under `build` to exclude `fs` from the client-side build:
 
 ```js
-export default {
-  build: {
     extend(config, { isServer }) {
       if (!isServer) {
         // Exclude fs in the client-side build
@@ -55,7 +53,5 @@ export default {
         };
       }
     }
-  }
-};
 ```
 
